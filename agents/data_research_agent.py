@@ -1,16 +1,22 @@
 import yfinance as yf
-from nsetools import Nse
+from nsepython import nse_eq
 
-nse = Nse()
-stockNse = nse.get_stock_codes()  # {'symbol': 'Company Name'}
+
+# Helper function to verify if symbol is valid via nsepython
+def is_valid_nse_symbol(symbol):
+    try:
+        data = nse_eq(symbol.upper())
+        return isinstance(data, dict) and "info" in data
+    except:
+        return False
 
 def resolve_yf_symbol(symbol):
     symbol = symbol.upper()
-    if symbol in stockNse:
+    if is_valid_nse_symbol(symbol):
         return f"{symbol}.NS"
     else:
-        print(f"Warning: '{symbol}' not found in NSE codes. Assuming Yahoo Finance symbol.")
-        return f"{symbol}.NS"
+        print(f"Warning: '{symbol}' not found via nsepython. Assuming Yahoo Finance NSE symbol.")
+        return f"{symbol}.NS"  # fallback always .NS for Indian equities
 
 def get_stock_data(symbol):
     yf_symbol = resolve_yf_symbol(symbol)
