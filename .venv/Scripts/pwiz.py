@@ -1,4 +1,4 @@
-#!D:\project\aig\AI-stock-analyzer\.venv\Scripts\python.exe
+#!D:\project\aig\ai-stock-analyzer\.venv\Scripts\python.exe
 
 import datetime
 import os
