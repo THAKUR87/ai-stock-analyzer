@@ -1,0 +1,175 @@
+<style >
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f5f7fa;
+        color: #2c3e50;
+    }
+
+    .stApp {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    /* Header */
+    .header-container {
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 4px 25px rgba(44, 62, 80, 0.05);
+        padding: 2rem;
+        margin-bottom: 2rem;
+    }
+
+        .header-container h1 {
+            color: #2c3e50;
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .header-container .icon {
+            font-size: 2.5rem;
+            margin-right: 1rem;
+            color: #2980b9;
+        }
+
+    /* Sidebar */
+    .stSidebar {
+        background-color: #2c3e50;
+        color: #ecf0f1;
+        border-right: 2px solid #34495e;
+    }
+
+        .stSidebar .stTextInput > div > div > input {
+            background-color: #ecf0f1;
+            color: #2c3e50;
+            border-radius: 6px;
+            padding: 0.5rem 1rem;
+        }
+
+        .stSidebar .stTextInput label {
+            color: #ecf0f1;
+            font-weight: 500;
+        }
+
+    .sidebar-metric-card {
+        background-color: #34495e;
+        color: #ecf0f1;
+        border-radius: 8px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .sidebar-metric-value {
+        font-size: 1.4rem;
+        font-weight: bold;
+    }
+
+    .sidebar-metric-label {
+        font-size: 0.85rem;
+        color: #bdc3c7;
+    }
+
+    /* Recommendation Badges */
+    .recommendation-badge {
+        padding: 0.75rem 1.5rem;
+        font-weight: bold;
+        border-radius: 8px;
+        font-size: 1.2rem;
+        display: inline-flex;
+        align-items: center;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    }
+
+    .recommendation-buy {
+        background-color: #eafaf1;
+        color: #27ae60;
+        border-left: 6px solid #2ecc71;
+    }
+
+    .recommendation-sell {
+        background-color: #fdecea;
+        color: #c0392b;
+        border-left: 6px solid #e74c3c;
+    }
+
+    .recommendation-hold {
+        background-color: #fff7e6;
+        color: #f39c12;
+        border-left: 6px solid #f39c12;
+    }
+
+    /* Metric Cards */
+    .metric-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .metric-card {
+        background-color: #ffffff;
+        border-radius: 12px;
+        padding: 1.2rem;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+        border-left: 5px solid #2980b9;
+    }
+
+    .metric-value {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: #2c3e50;
+    }
+
+    .metric-label {
+        font-size: 0.9rem;
+        color: #7f8c8d;
+        margin-top: 0.25rem;
+    }
+
+    /* Tabs */
+    .stTabs [data-baseweb="tab"] {
+        font-weight: 600;
+        font-size: 1rem;
+        padding: 1rem;
+        color: #7f8c8d;
+        border-bottom: 3px solid transparent;
+    }
+
+        .stTabs [data-baseweb="tab"][aria-selected="true"] {
+            border-color: #2980b9;
+            color: #2980b9;
+        }
+
+    /* News Cards */
+    .news-card {
+        background: #fff;
+        border-radius: 10px;
+        padding: 1rem 1.25rem;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+        margin-bottom: 1rem;
+        border-left: 4px solid #2980b9;
+    }
+
+        .news-card strong {
+            font-size: 1.1rem;
+            color: #2c3e50;
+        }
+
+        .news-card small {
+            font-size: 0.95rem;
+            color: #7f8c8d;
+        }
+
+    /* Footer */
+    .footer-container {
+        text-align: center;
+        color: #95a5a6;
+        font-size: 0.85rem;
+        margin-top: 3rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #dfe6e9;
+    }
+
+</style >
