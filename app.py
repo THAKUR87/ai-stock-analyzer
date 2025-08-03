@@ -1,17 +1,55 @@
 ﻿import streamlit as st
+import pandas as pd
 from agents.news_info_agent import get_stock_news
 from agents.data_research_agent import get_stock_data
 from agents.analyst_agent import analyze_stock
 from agents.financial_decision_agent import make_decision
-from utils.portfolio_tracker import log_decision, get_portfolio
+from utils.portfolio_tracker import get_portfolio_from_session, download_portfolio_csv, load_uploaded_portfolio, log_decision_to_session
 
-# Configure the page
+
+
+# Custom Header (replace existing title line)
+header_html = """
+    <div style="background-color: #0b5394; padding: 20px; border-radius: 8px; text-align: center;">
+        <h1 style="color: white; margin: 0;">📊 AI Powered – AI Stock Analyzer</h1>
+        <p style="color: #d9d9d9; font-size: 16px; margin: 5px 0 0;">
+            Analyze. Interpret. Decide. Empowering your investment decisions with AI.
+        </p>
+    </div>
+"""
+st.markdown(header_html, unsafe_allow_html=True)
 st.set_page_config(page_title="📊 AI Powered Stock Analyzer", layout="wide")
-st.markdown("<h1 style='text-align: center; color: #4a90e2;'>📈 AI Powered – Stock Analyzer</h1>", unsafe_allow_html=True)
+
+# Allow user to upload their own portfolio file
+uploaded_file = st.sidebar.file_uploader("📂 Upload your portfolio.csv", type="csv")
+
+if uploaded_file and "portfolio" not in st.session_state:
+    st.session_state["portfolio"] = load_uploaded_portfolio(uploaded_file)
+
+# Show current portfolio from session
+portfolio_df = get_portfolio_from_session()
+
+st.sidebar.title("📋 Portfolio Tracker")
+if portfolio_df.empty:
+    st.sidebar.info("No portfolio data uploaded or logged yet.")
+else:
+    st.sidebar.dataframe(portfolio_df.sort_values("DateTime", ascending=False), use_container_width=True)
+
+# Add download button
+csv_data = download_portfolio_csv()
+st.sidebar.download_button(
+    label="⬇️ Download Your Portfolio",
+    data=csv_data,
+    file_name="portfolio.csv",
+    mime="text/csv"
+)
 
 # User input
 #exchange = st.selectbox("Choose Exchange", ["NSE", "BSE"])
 stock_symbol_input = st.text_input("Enter Stock Symbol (e.g., RELIANCE, TCS):").upper()
+
+if not stock_symbol_input:
+    st.info("🔍 Enter a stock symbol above to analyze a company using AI.")
 
 #suffix = ".NS" if exchange == "NSE" else ".BO"
 if stock_symbol_input :
@@ -23,7 +61,7 @@ if stock_symbol_input :
         financial_data = get_stock_data(stock_symbol)
         analysis_result = analyze_stock(news_data, financial_data)
         decision = make_decision(financial_data['current_price'], analysis_result["summary"])
-        log_decision(stock_symbol, financial_data['current_price'], decision.split()[0])
+        log_decision_to_session(stock_symbol, financial_data['current_price'], decision.split()[0])
 
     # Display recommendation with color and emoji
     if "BUY" in decision.upper():
@@ -52,7 +90,13 @@ if stock_symbol_input :
     col4.metric("52W Low", f"₹{financial_data.get('52_week_low', 'N/A')}")
     col5.metric("Market Cap", financial_data.get("market_cap", "N/A"))
 
-    import pandas as pd
+    from utils.portfolio_tracker import (
+        load_uploaded_portfolio,
+        log_decision_to_session,
+        get_portfolio_from_session,
+        download_portfolio_csv
+    )
+
 
     def sanitize(value):
         if isinstance(value, (dict, list)):
@@ -69,7 +113,6 @@ if stock_symbol_input :
         for col in df.columns:
             df[col] = pd.to_numeric(df[col], errors="coerce")  # Coerce strings like "N/A" to NaN
 
-        df = df.fillna("N/A")  # Final fill to avoid Arrow errors
         return df
 
 
@@ -99,8 +142,9 @@ if stock_symbol_input :
 
 
     st.markdown("### 🧾 Company Financial Statements")
-    clean_financials_df = sanitize_financials_df(financial_data["financials"])
-    st.dataframe(clean_financials_df, use_container_width=True)
+    clean_financials_df = sanitize_financials_df_preserve_numeric(financial_data["financials"])
+    st.dataframe(clean_financials_df.fillna("N/A"), use_container_width=True)
+
 
     with st.expander("📦 Raw Company Data (for dev/debug)"):
         st.json(financial_data["info"])
@@ -119,7 +163,26 @@ if stock_symbol_input :
         st.markdown(f"[🔗 Read more]({article.get('url', '#')})", unsafe_allow_html=True)
         st.markdown("---")
 
-# Sidebar portfolio
-st.sidebar.title("📋 Portfolio Tracker")
-portfolio_df = get_portfolio()
-st.sidebar.dataframe(portfolio_df.sort_values("DateTime", ascending=False))
+
+footer = """
+    <style>
+        .footer {
+            position: relative;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            padding: 10px;
+            margin-top: 50px;
+            color: #999999;
+            font-size: 0.9em;
+        }
+        .footer a {
+            color: #4a90e2;
+            text-decoration: none;
+        }
+    </style>
+    <div class="footer">
+        © 2025 Pawan Parihar | Contact: <a href="mailto:pawanju87@gmail.com">pawanju87@gmail.com</a>
+    </div>
+"""
+st.markdown(footer, unsafe_allow_html=True)
